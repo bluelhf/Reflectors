@@ -14,6 +14,6 @@ public class InstanceMethodReference<T> extends BaseMethodReference<T> {
 
     @Override
     public Result<T> invoke(Object... params) {
-        return super.invoke(target, params);
+        return super.invokeOn(target, params);
     }
 }
