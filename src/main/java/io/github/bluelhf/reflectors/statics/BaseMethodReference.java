@@ -44,7 +44,7 @@ public class BaseMethodReference<T> {
     protected Result<T> invokeOnUnsafe(@Nullable Object target, Object... params) {
         boolean wasAccessible;
         try {
-            wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : this);
+            wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : target);
         } catch (Throwable e) {
             return new Result<>(e);
         }

@@ -15,7 +15,7 @@ public class InstanceReference extends ClassReference {
         super(instance.getClass());
         this.instance = instance;
     }
-    public InstanceReference(Object instance, Class<?> clazz) {
+    public InstanceReference(Object instance, Class<Object> clazz) {
         super(clazz);
         this.instance = instance;
     }
@@ -35,17 +35,17 @@ public class InstanceReference extends ClassReference {
         }
     }
 
-    public Optional<InstanceFieldReference<?>> field(String name) {
-        Optional<InstanceFieldReference<?>> declared = getDeclaredField(name);
+    public Optional<InstanceFieldReference<Object>> field(String name) {
+        Optional<InstanceFieldReference<Object>> declared = getDeclaredField(name);
         if (declared.isPresent()) return declared;
         return getPublicField(name);
     }
 
-    public Collection<InstanceFieldReference<?>> getDeclaredFields() {
+    public Collection<InstanceFieldReference<Object>> getDeclaredFields() {
         return Arrays.stream(getInner().getDeclaredFields()).map(f -> new InstanceFieldReference<>(instance, f)).collect(Collectors.toList());
     }
 
-    public Optional<InstanceFieldReference<?>> getDeclaredField(String name) {
+    public Optional<InstanceFieldReference<Object>> getDeclaredField(String name) {
         try {
             return Optional.of(new InstanceFieldReference<>(instance, getInner().getDeclaredField(name)));
         } catch (NoSuchFieldException e) {
@@ -54,11 +54,11 @@ public class InstanceReference extends ClassReference {
         }
     }
 
-    public Collection<InstanceFieldReference<?>> getPublicFields() {
+    public Collection<InstanceFieldReference<Object>> getPublicFields() {
         return Arrays.stream(getInner().getFields()).map(f -> new InstanceFieldReference<>(instance, f)).collect(Collectors.toList());
     }
 
-    public Optional<InstanceFieldReference<?>> getPublicField(String name) {
+    public Optional<InstanceFieldReference<Object>> getPublicField(String name) {
         try {
             return Optional.of(new InstanceFieldReference<>(instance, getInner().getField(name)));
         } catch (NoSuchFieldException e) {
@@ -67,17 +67,17 @@ public class InstanceReference extends ClassReference {
         }
     }
 
-    public Optional<InstanceMethodReference<?>> method(String name, Class<?>... parameterTypes) {
-        Optional<InstanceMethodReference<?>> declared = getDeclaredMethod(name, parameterTypes);
+    public Optional<InstanceMethodReference<Object>> method(String name, Class<Object>... parameterTypes) {
+        Optional<InstanceMethodReference<Object>> declared = getDeclaredMethod(name, parameterTypes);
         if (declared.isPresent()) return declared;
         return getPublicMethod(name, parameterTypes);
     }
 
-    public Collection<InstanceMethodReference<?>> getDeclaredMethods() {
+    public Collection<InstanceMethodReference<Object>> getDeclaredMethods() {
         return Arrays.stream(getInner().getDeclaredMethods()).map((m) -> new InstanceMethodReference<>(instance, m)).collect(Collectors.toList());
     }
 
-    public Optional<InstanceMethodReference<?>> getDeclaredMethod(String name, Class<?>... parameterTypes) {
+    public Optional<InstanceMethodReference<Object>> getDeclaredMethod(String name, Class<Object>... parameterTypes) {
         try {
             return Optional.of(new InstanceMethodReference<>(instance, getInner().getDeclaredMethod(name, parameterTypes)));
         } catch (NoSuchMethodException e) {
@@ -86,11 +86,11 @@ public class InstanceReference extends ClassReference {
         }
     }
 
-    public Collection<InstanceMethodReference<?>> getPublicMethods() {
+    public Collection<InstanceMethodReference<Object>> getPublicMethods() {
         return Arrays.stream(getInner().getMethods()).map((m) -> new InstanceMethodReference<>(instance, m)).collect(Collectors.toList());
     }
 
-    public Optional<InstanceMethodReference<?>> getPublicMethod(String name, Class<?>... parameterTypes) {
+    public Optional<InstanceMethodReference<Object>> getPublicMethod(String name, Class<Object>... parameterTypes) {
         try {
             return Optional.of(new InstanceMethodReference<>(instance, getInner().getMethod(name, parameterTypes)));
         } catch (NoSuchMethodException e) {

@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ClassReference {
-    Class<? extends Object> inner;
+    Class<?> inner;
 
     public ClassReference(Class<? extends Object> clazz) {
         this.inner = clazz;
@@ -35,17 +35,17 @@ public class ClassReference {
         }
     }
 
-    public Optional<? extends BaseFieldReference<?>> field(String name) {
-        Optional<? extends BaseFieldReference<?>> declared = getDeclaredField(name);
+    public Optional<? extends BaseFieldReference<Object>> field(String name) {
+        Optional<? extends BaseFieldReference<Object>> declared = getDeclaredField(name);
         if (declared.isPresent()) return declared;
         return getPublicField(name);
     }
 
-    public Collection<? extends BaseFieldReference<?>> getDeclaredFields() {
+    public Collection<? extends BaseFieldReference<Object>> getDeclaredFields() {
         return Arrays.stream(inner.getDeclaredFields()).map(BaseFieldReference::new).collect(Collectors.toList());
     }
 
-    public Optional<? extends BaseFieldReference<?>> getDeclaredField(String name) {
+    public Optional<? extends BaseFieldReference<Object>> getDeclaredField(String name) {
         try {
             return Optional.of(new BaseFieldReference<>(inner.getDeclaredField(name)));
         } catch (NoSuchFieldException e) {
@@ -54,11 +54,11 @@ public class ClassReference {
         }
     }
 
-    public Collection<? extends BaseFieldReference<?>> getPublicFields() {
+    public Collection<? extends BaseFieldReference<Object>> getPublicFields() {
         return Arrays.stream(inner.getFields()).map(BaseFieldReference::new).collect(Collectors.toList());
     }
 
-    public Optional<? extends BaseFieldReference<?>> getPublicField(String name) {
+    public Optional<? extends BaseFieldReference<Object>> getPublicField(String name) {
         try {
             return Optional.of(new BaseFieldReference<>(inner.getField(name)));
         } catch (NoSuchFieldException e) {
@@ -67,17 +67,17 @@ public class ClassReference {
         }
     }
 
-    public Optional<? extends BaseMethodReference<?>> method(String name, Class<?>... parameterTypes) {
-        Optional<? extends BaseMethodReference<?>> declared = getDeclaredMethod(name, parameterTypes);
+    public Optional<? extends BaseMethodReference<Object>> method(String name, Class<Object>... parameterTypes) {
+        Optional<? extends BaseMethodReference<Object>> declared = getDeclaredMethod(name, parameterTypes);
         if (declared.isPresent()) return declared;
         return getPublicMethod(name, parameterTypes);
     }
 
-    public Collection<? extends BaseMethodReference<?>> getDeclaredMethods() {
+    public Collection<? extends BaseMethodReference<Object>> getDeclaredMethods() {
         return Arrays.stream(inner.getDeclaredMethods()).map(BaseMethodReference::new).collect(Collectors.toList());
     }
 
-    public Optional<? extends BaseMethodReference<?>> getDeclaredMethod(String name, Class<?>... parameterTypes) {
+    public Optional<? extends BaseMethodReference<Object>> getDeclaredMethod(String name, Class<Object>... parameterTypes) {
         try {
             return Optional.of(new BaseMethodReference<>(inner.getDeclaredMethod(name, parameterTypes)));
         } catch (NoSuchMethodException e) {
@@ -86,11 +86,11 @@ public class ClassReference {
         }
     }
 
-    public Collection<? extends BaseMethodReference<?>> getPublicMethods() {
+    public Collection<? extends BaseMethodReference<Object>> getPublicMethods() {
         return Arrays.stream(inner.getMethods()).map(BaseMethodReference::new).collect(Collectors.toList());
     }
 
-    public Optional<? extends BaseMethodReference<?>> getPublicMethod(String name, Class<?>... parameterTypes) {
+    public Optional<? extends BaseMethodReference<Object>> getPublicMethod(String name, Class<Object>... parameterTypes) {
         try {
             return Optional.of(new BaseMethodReference<>(inner.getMethod(name, parameterTypes)));
         } catch (NoSuchMethodException e) {
@@ -103,9 +103,9 @@ public class ClassReference {
         return inner;
     }
 
-    public Collection<? extends BaseMethodReference<?>> getAllMethods() {
-        Collection<? extends BaseMethodReference<?>> publicMethods = getPublicMethods();
-        List<BaseMethodReference<?>> full = getDeclaredMethods().stream().filter(m -> !publicMethods.contains(m)).collect(Collectors.toList());
+    public Collection<? extends BaseMethodReference<Object>> getAllMethods() {
+        Collection<? extends BaseMethodReference<Object>> publicMethods = getPublicMethods();
+        List<BaseMethodReference<Object>> full = getDeclaredMethods().stream().filter(m -> !publicMethods.contains(m)).collect(Collectors.toList());
         full.addAll(publicMethods);
         return full;
     }
