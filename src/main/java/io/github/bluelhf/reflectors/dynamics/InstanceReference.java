@@ -15,7 +15,7 @@ public class InstanceReference extends ClassReference {
         super(instance.getClass());
         this.instance = instance;
     }
-    public InstanceReference(Object instance, Class<Object> clazz) {
+    public InstanceReference(Object instance, Class<?> clazz) {
         super(clazz);
         this.instance = instance;
     }
@@ -67,7 +67,7 @@ public class InstanceReference extends ClassReference {
         }
     }
 
-    public Optional<InstanceMethodReference<Object>> method(String name, Class<Object>... parameterTypes) {
+    public Optional<InstanceMethodReference<Object>> method(String name, Class<?>... parameterTypes) {
         Optional<InstanceMethodReference<Object>> declared = getDeclaredMethod(name, parameterTypes);
         if (declared.isPresent()) return declared;
         return getPublicMethod(name, parameterTypes);
@@ -77,7 +77,7 @@ public class InstanceReference extends ClassReference {
         return Arrays.stream(getInner().getDeclaredMethods()).map((m) -> new InstanceMethodReference<>(instance, m)).collect(Collectors.toList());
     }
 
-    public Optional<InstanceMethodReference<Object>> getDeclaredMethod(String name, Class<Object>... parameterTypes) {
+    public Optional<InstanceMethodReference<Object>> getDeclaredMethod(String name, Class<?>... parameterTypes) {
         try {
             return Optional.of(new InstanceMethodReference<>(instance, getInner().getDeclaredMethod(name, parameterTypes)));
         } catch (NoSuchMethodException e) {
@@ -90,7 +90,7 @@ public class InstanceReference extends ClassReference {
         return Arrays.stream(getInner().getMethods()).map((m) -> new InstanceMethodReference<>(instance, m)).collect(Collectors.toList());
     }
 
-    public Optional<InstanceMethodReference<Object>> getPublicMethod(String name, Class<Object>... parameterTypes) {
+    public Optional<InstanceMethodReference<Object>> getPublicMethod(String name, Class<?>... parameterTypes) {
         try {
             return Optional.of(new InstanceMethodReference<>(instance, getInner().getMethod(name, parameterTypes)));
         } catch (NoSuchMethodException e) {

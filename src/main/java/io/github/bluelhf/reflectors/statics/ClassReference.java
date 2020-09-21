@@ -67,7 +67,7 @@ public class ClassReference {
         }
     }
 
-    public Optional<? extends BaseMethodReference<Object>> method(String name, Class<Object>... parameterTypes) {
+    public Optional<? extends BaseMethodReference<Object>> method(String name, Class<?>... parameterTypes) {
         Optional<? extends BaseMethodReference<Object>> declared = getDeclaredMethod(name, parameterTypes);
         if (declared.isPresent()) return declared;
         return getPublicMethod(name, parameterTypes);
@@ -77,7 +77,7 @@ public class ClassReference {
         return Arrays.stream(inner.getDeclaredMethods()).map(BaseMethodReference::new).collect(Collectors.toList());
     }
 
-    public Optional<? extends BaseMethodReference<Object>> getDeclaredMethod(String name, Class<Object>... parameterTypes) {
+    public Optional<? extends BaseMethodReference<Object>> getDeclaredMethod(String name, Class<?>... parameterTypes) {
         try {
             return Optional.of(new BaseMethodReference<>(inner.getDeclaredMethod(name, parameterTypes)));
         } catch (NoSuchMethodException e) {
@@ -90,7 +90,7 @@ public class ClassReference {
         return Arrays.stream(inner.getMethods()).map(BaseMethodReference::new).collect(Collectors.toList());
     }
 
-    public Optional<? extends BaseMethodReference<Object>> getPublicMethod(String name, Class<Object>... parameterTypes) {
+    public Optional<? extends BaseMethodReference<Object>> getPublicMethod(String name, Class<?>... parameterTypes) {
         try {
             return Optional.of(new BaseMethodReference<>(inner.getMethod(name, parameterTypes)));
         } catch (NoSuchMethodException e) {
