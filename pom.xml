@@ -6,7 +6,7 @@
 
     <groupId>io.github.bluelhf</groupId>
     <artifactId>Reflectors</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0a</version>
     <dependencies>
         <dependency>
             <groupId>org.jetbrains</groupId>
