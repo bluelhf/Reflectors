@@ -40,7 +40,13 @@ public class BaseFieldReference<T> {
     }
 
     protected void setUnsafe(@Nullable Object target, T value) {
-        boolean wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : this);
+        boolean wasAccessible;
+        try {
+            wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : target);
+        } catch (Throwable e) {
+            Reflectors.getLogger().warning("Got " + e.getClass().getSimpleName() + " when setting " + inner.getDeclaringClass().getCanonicalName() + "#" + inner.getName() + " of " + target + " to " + value);
+            return;
+        }
         try {
             inner.setAccessible(true);
             inner.set(target, value);
@@ -53,7 +59,12 @@ public class BaseFieldReference<T> {
     }
 
     protected Result<T> getUnsafe(@Nullable Object target) {
-        boolean wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : this);
+        boolean wasAccessible;
+        try {
+            wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : target);
+        } catch (Throwable e) {
+            return new Result<>(e);
+        }
         try {
             inner.setAccessible(true);
             //noinspection unchecked - Just throw ClassCastException
