@@ -42,7 +42,13 @@ public class BaseMethodReference<T> {
 
     @SuppressWarnings("SameParameterValue")
     protected Result<T> invokeOnUnsafe(@Nullable Object target, Object... params) {
-        boolean wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : this);
+        boolean wasAccessible;
+        try {
+            wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : this);
+        } catch (Throwable e) {
+            return new Result<>(e);
+        }
+
         try {
             inner.setAccessible(true);
             //noinspection unchecked - Just throw ClassCastException
