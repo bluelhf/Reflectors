@@ -44,7 +44,7 @@ public class BaseFieldReference<T> {
         try {
             wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : target);
         } catch (Throwable e) {
-            Reflectors.getLogger().warning("Got " + e.getClass().getSimpleName() + " when setting " + inner.getDeclaringClass().getCanonicalName() + "#" + inner.getName() + " of " + target + " to " + value);
+            Reflectors.warn("setting " + inner.getDeclaringClass().getCanonicalName() + "#" + inner.getName() + " of " + target + " to " + value, e);
             return;
         }
         try {
@@ -52,17 +52,19 @@ public class BaseFieldReference<T> {
             inner.set(target, value);
             inner.setAccessible(wasAccessible);
         } catch (Throwable e) {
-            Reflectors.getLogger().warning("Got " + e.getClass().getSimpleName() + " when setting " + inner.getDeclaringClass().getCanonicalName() + "#" + inner.getName() + " of " + target + " to " + value);
-            Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEachOrdered(s -> Reflectors.getLogger().warning("  " + s));
+            Reflectors.warn("setting " + inner.getDeclaringClass().getCanonicalName() + "#" + inner.getName() + " of " + target + " to " + value, e);
             inner.setAccessible(wasAccessible);
         }
     }
+
+
 
     protected Result<T> getUnsafe(@Nullable Object target) {
         boolean wasAccessible;
         try {
             wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : target);
         } catch (Throwable e) {
+            Reflectors.warn("getting " + inner.getDeclaringClass().getCanonicalName() + "#" + inner.getName() + " from " + target, e);
             return new Result<>(e);
         }
         try {
@@ -72,7 +74,7 @@ public class BaseFieldReference<T> {
             inner.setAccessible(wasAccessible);
             return result;
         } catch (Throwable e) {
-            Reflectors.getLogger().warning("Got " + e.getClass().getSimpleName() + " when getting " + inner.getDeclaringClass().getCanonicalName() + "#" + inner.getName() + " from " + target);
+            Reflectors.warn("getting " + inner.getDeclaringClass().getCanonicalName() + "#" + inner.getName() + " from " + target, e);
             Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEachOrdered(s -> Reflectors.getLogger().warning("  " + s));
             inner.setAccessible(wasAccessible);
             return new Result<>(e);

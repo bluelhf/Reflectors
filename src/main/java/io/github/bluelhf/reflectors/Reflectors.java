@@ -6,6 +6,7 @@ import io.github.bluelhf.reflectors.statics.ClassReference;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -35,6 +36,12 @@ public class Reflectors {
     public static InstanceReference reflect(Object object) {
         logger.finest("Creating instance reference to " + object.getClass().getCanonicalName());
         return new InstanceReference(object);
+    }
+
+    public static void warn(String action, Throwable e) {
+        Reflectors.getLogger().warning("Got " + e.getClass().getSimpleName() + " when " + action + ":");
+        Reflectors.getLogger().warning(e.getLocalizedMessage());
+        Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEachOrdered(s -> Reflectors.getLogger().warning("  " + s));
     }
 
     public static Logger getLogger() {

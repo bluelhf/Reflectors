@@ -46,6 +46,7 @@ public class BaseMethodReference<T> {
         try {
             wasAccessible = inner.canAccess(Modifier.isStatic(inner.getModifiers()) ? null : target);
         } catch (Throwable e) {
+            Reflectors.warn("invoking " + getDeclaration() + " on " + target + " with args " + Arrays.toString(params), e);
             return new Result<>(e);
         }
 
@@ -56,7 +57,7 @@ public class BaseMethodReference<T> {
             inner.setAccessible(wasAccessible);
             return result;
         } catch (Throwable e) {
-            Reflectors.getLogger().warning("Got " + e.getClass().getSimpleName() + " when invoking " + getDeclaration() + " on " + target + " with args " + Arrays.toString(params) + ": ");
+            Reflectors.warn("invoking " + getDeclaration() + " on " + target + " with args " + Arrays.toString(params), e);
             Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEachOrdered(s -> Reflectors.getLogger().warning("  " + s));
             inner.setAccessible(wasAccessible);
             return new Result<>(e);
