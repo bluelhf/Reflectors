@@ -3,6 +3,7 @@ package io.github.bluelhf.reflectors;
 import io.github.bluelhf.reflectors.dynamics.InstanceReference;
 import io.github.bluelhf.reflectors.statics.ClassReference;
 
+import java.io.PrintStream;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -52,7 +53,11 @@ public class Reflectors {
         return log;
     }
 
-    public static void tellMeWhatsWrongPlease() {
+    public static void printLog() {
+        printLog(System.out);
+    }
+
+    public static void printLog(PrintStream out) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ssX");
         Reflectors.getLog().stream().map(lr -> "[" + lr.getInstant().atOffset(ZoneOffset.UTC).format(formatter) + "] [" + lr.getLevel() + "] " + lr.getMessage()).forEachOrdered(System.out::println);
     }
